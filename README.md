@@ -4,7 +4,7 @@
 - экспорт
 ```zsh
 export NumberOfServers=6
-export BackendAddres0=8080
+export BackendAddre=8080
 export BackendAddres1=8081
 export BackendAddres2=8082
 export BackendAddres3=8083
