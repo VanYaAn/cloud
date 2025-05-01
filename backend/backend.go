@@ -19,7 +19,7 @@ type Backend struct {
 func (b *Backend) IsAlive() bool {
 	b.mux.Lock()
 	a := b.Alive
-	b.mux.Lock()
+	b.mux.Unlock()
 	return a
 }
 

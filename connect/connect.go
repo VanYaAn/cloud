@@ -18,9 +18,9 @@ const (
 )
 
 func Ping(b *backend.Backend) error {
-	conn, err := net.DialTimeout("tcp", b.Addr.String(), 2*time.Millisecond)
+	conn, err := net.DialTimeout("tcp", b.Addr.Host, 1*time.Second)
 	if err != nil {
-		log.Println("Ping: Backend"+b.Addr.Host+"is not working for reason", err)
+		log.Println("Ping: Backend "+b.Addr.Host+" is not working for reason", err)
 		return err
 	}
 	defer conn.Close()
@@ -30,7 +30,7 @@ func Ping(b *backend.Backend) error {
 func FormatStringToURL(ss []string) ([]*url.URL, error) {
 	res := make([]*url.URL, 0)
 	for _, addr := range ss {
-		tmp, err := url.Parse(LOCALHOST + addr)
+		tmp, err := url.Parse("http://localhost" + ":" + addr)
 		if err != nil {
 			log.Fatalf("FormatStringToURL: fail parse env file %v", err)
 		}
@@ -43,7 +43,7 @@ func FormatStringToURL(ss []string) ([]*url.URL, error) {
 func GetAttemptsFromContext(r *http.Request) int {
 
 	if attempts, ok := r.Context().Value(Attempts).(int); ok {
-		log.Printf("GetAttemptsFromContext: ok = true , attempts = %s", attempts)
+		log.Printf("GetAttemptsFromContext: ok = true , attempts = %x", attempts)
 		return attempts
 	}
 	return 1
@@ -51,7 +51,7 @@ func GetAttemptsFromContext(r *http.Request) int {
 
 func GetRetryFromContext(r *http.Request) int {
 	if retry, ok := r.Context().Value(Retry).(int); ok {
-		log.Printf("GetRetryFromContext: ok = true , retry = %s", retry)
+		log.Printf("GetRetryFromContext: ok = true , retry = %x", retry)
 		return retry
 	}
 	return 0
